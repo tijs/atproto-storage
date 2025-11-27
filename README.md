@@ -1,5 +1,7 @@
 # @tijs/atproto-storage
 
+[![Test](https://github.com/tijs/atproto-storage/actions/workflows/test.yml/badge.svg)](https://github.com/tijs/atproto-storage/actions/workflows/test.yml)
+
 Storage implementations for AT Protocol OAuth applications. Provides a simple
 key-value storage interface with implementations for in-memory and SQLite
 backends.
