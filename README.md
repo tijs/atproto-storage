@@ -105,7 +105,11 @@ const deletedCount = await storage.cleanup();
 ```typescript
 interface OAuthStorage {
   get<T = unknown>(key: string): Promise<T | null>;
-  set<T = unknown>(key: string, value: T, options?: { ttl?: number }): Promise<void>;
+  set<T = unknown>(
+    key: string,
+    value: T,
+    options?: { ttl?: number },
+  ): Promise<void>;
   delete(key: string): Promise<void>;
 }
 ```
