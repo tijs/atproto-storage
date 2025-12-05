@@ -7,12 +7,12 @@
  * - In-memory storage (for testing/development)
  * - SQLite storage (works with any SQLite driver via adapters)
  *
- * @example Val.Town / libSQL
+ * @example Val.Town / libSQL / Turso
  * ```typescript
  * import { sqlite } from "https://esm.town/v/std/sqlite";
- * import { SQLiteStorage, valTownAdapter } from "@tijs/atproto-storage";
+ * import { SQLiteStorage, sqliteAdapter } from "@tijs/atproto-storage";
  *
- * const storage = new SQLiteStorage(valTownAdapter(sqlite));
+ * const storage = new SQLiteStorage(sqliteAdapter(sqlite));
  * ```
  *
  * @example Deno native SQLite
@@ -54,6 +54,6 @@ export type { SQLiteStorageOptions } from "./src/sqlite.ts";
 export {
   betterSqlite3Adapter,
   denoSqliteAdapter,
-  valTownAdapter,
+  sqliteAdapter,
 } from "./src/adapters.ts";
 export type { ExecutableDriver, PrepareDriver } from "./src/adapters.ts";

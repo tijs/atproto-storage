@@ -25,27 +25,27 @@ export interface PrepareDriver {
 }
 
 /**
- * Adapter for Val.Town sqlite and libSQL/Turso client.
- * These drivers share the same execute({ sql, args }) API pattern.
+ * Adapter for SQLite drivers using the execute({ sql, args }) pattern.
+ * Works with Val.Town sqlite, libSQL/Turso, and similar drivers.
  *
  * @example Val.Town
  * ```typescript
  * import { sqlite } from "https://esm.town/v/std/sqlite";
- * import { SQLiteStorage, valTownAdapter } from "@tijs/atproto-storage";
+ * import { SQLiteStorage, sqliteAdapter } from "@tijs/atproto-storage";
  *
- * const storage = new SQLiteStorage(valTownAdapter(sqlite));
+ * const storage = new SQLiteStorage(sqliteAdapter(sqlite));
  * ```
  *
  * @example libSQL/Turso
  * ```typescript
  * import { createClient } from "@libsql/client";
- * import { SQLiteStorage, valTownAdapter } from "@tijs/atproto-storage";
+ * import { SQLiteStorage, sqliteAdapter } from "@tijs/atproto-storage";
  *
  * const client = createClient({ url: "libsql://..." });
- * const storage = new SQLiteStorage(valTownAdapter(client));
+ * const storage = new SQLiteStorage(sqliteAdapter(client));
  * ```
  */
-export function valTownAdapter(driver: ExecutableDriver): SQLiteAdapter {
+export function sqliteAdapter(driver: ExecutableDriver): SQLiteAdapter {
   return {
     execute: async (sql: string, params: unknown[]): Promise<unknown[][]> => {
       const result = await driver.execute({ sql, args: params });

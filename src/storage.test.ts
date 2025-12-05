@@ -1,11 +1,11 @@
 import { assertEquals, assertExists } from "@std/assert";
 import { MemoryStorage } from "./memory.ts";
 import { SQLiteStorage } from "./sqlite.ts";
-import { valTownAdapter } from "./adapters.ts";
+import { sqliteAdapter } from "./adapters.ts";
 import type { SQLiteAdapter } from "./types.ts";
 
 // Mock SQLite database that implements the ExecutableDriver interface
-// (used with valTownAdapter to create an SQLiteAdapter)
+// (used with sqliteAdapter to create an SQLiteAdapter)
 class MockExecutableDriver {
   private tables = new Map<string, Map<string, unknown[]>>();
 
@@ -300,9 +300,9 @@ Deno.test("SQLiteStorage - basic operations with direct adapter", async (t) => {
   });
 });
 
-Deno.test("SQLiteStorage - with valTownAdapter", async (t) => {
+Deno.test("SQLiteStorage - with sqliteAdapter", async (t) => {
   const mockDriver = new MockExecutableDriver();
-  const adapter = valTownAdapter(mockDriver);
+  const adapter = sqliteAdapter(mockDriver);
   const storage = new SQLiteStorage(adapter);
 
   await t.step("set and get value", async () => {
@@ -369,7 +369,7 @@ Deno.test("SQLiteStorage - TTL handling", async (t) => {
 
 // ============ Adapter Tests ============
 
-Deno.test("valTownAdapter - transforms execute signature", async () => {
+Deno.test("sqliteAdapter - transforms execute signature", async () => {
   let capturedSql = "";
   let capturedParams: unknown[] = [];
 
@@ -381,7 +381,7 @@ Deno.test("valTownAdapter - transforms execute signature", async () => {
     },
   };
 
-  const adapter = valTownAdapter(mockDriver);
+  const adapter = sqliteAdapter(mockDriver);
   const result = await adapter.execute("SELECT * FROM test WHERE id = ?", [
     123,
   ]);
