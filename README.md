@@ -4,8 +4,7 @@
 [![JSR](https://jsr.io/badges/@tijs/atproto-storage)](https://jsr.io/@tijs/atproto-storage)
 
 Storage implementations for AT Protocol OAuth applications. Provides a simple
-key-value storage interface with implementations for in-memory and SQLite
-backends.
+key-value storage interface with multiple backend options.
 
 ## Installation
 
@@ -13,7 +12,7 @@ backends.
 import {
   MemoryStorage,
   SQLiteStorage,
-  valTownAdapter,
+  sqliteAdapter,
 } from "jsr:@tijs/atproto-storage";
 ```
 
@@ -44,9 +43,9 @@ SQLiteStorage works with any SQLite driver via adapters:
 
 ```typescript
 import { sqlite } from "https://esm.town/v/std/sqlite";
-import { SQLiteStorage, valTownAdapter } from "jsr:@tijs/atproto-storage";
+import { SQLiteStorage, sqliteAdapter } from "jsr:@tijs/atproto-storage";
 
-const storage = new SQLiteStorage(valTownAdapter(sqlite));
+const storage = new SQLiteStorage(sqliteAdapter(sqlite));
 ```
 
 #### Deno Native SQLite
@@ -84,6 +83,56 @@ const customAdapter: SQLiteAdapter = {
 const storage = new SQLiteStorage(customAdapter);
 ```
 
+### Deno KV Storage
+
+Uses Deno's built-in key-value store. No external dependencies.
+
+```typescript
+import { DenoKvStorage } from "jsr:@tijs/atproto-storage";
+
+const kv = await Deno.openKv();
+const storage = new DenoKvStorage(kv);
+
+// Optional: custom key prefix (default: ["oauth_storage"])
+const storage2 = new DenoKvStorage(kv, { prefix: ["my_app", "oauth"] });
+```
+
+### Redis Storage
+
+Works with any Redis client via the `RedisAdapter` interface.
+
+```typescript
+import { RedisStorage, RedisAdapter } from "jsr:@tijs/atproto-storage";
+import { createClient } from "npm:redis";
+
+const client = createClient();
+await client.connect();
+
+const adapter: RedisAdapter = {
+  get: (key) => client.get(key),
+  set: async (key, value, ttl) => {
+    if (ttl) await client.setEx(key, ttl, value);
+    else await client.set(key, value);
+  },
+  del: (key) => client.del(key).then(() => {}),
+};
+
+const storage = new RedisStorage(adapter);
+```
+
+### Upstash Redis Storage (Serverless)
+
+Uses the Upstash Redis REST API — no Redis client or persistent connection needed.
+
+```typescript
+import { UpstashRedisStorage } from "jsr:@tijs/atproto-storage";
+
+const storage = new UpstashRedisStorage({
+  url: Deno.env.get("UPSTASH_REDIS_REST_URL")!,
+  token: Deno.env.get("UPSTASH_REDIS_REST_TOKEN")!,
+});
+```
+
 ### Options
 
 ```typescript
@@ -105,6 +154,8 @@ const deletedCount = await storage.cleanup();
 
 ### OAuthStorage Interface
 
+All backends implement this interface:
+
 ```typescript
 interface OAuthStorage {
   get<T = unknown>(key: string): Promise<T | null>;
@@ -122,6 +173,16 @@ interface OAuthStorage {
 ```typescript
 interface SQLiteAdapter {
   execute(sql: string, params: unknown[]): Promise<unknown[][]>;
+}
+```
+
+### RedisAdapter Interface
+
+```typescript
+interface RedisAdapter {
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string, ttlSeconds?: number): Promise<void>;
+  del(key: string): Promise<void>;
 }
 ```
 

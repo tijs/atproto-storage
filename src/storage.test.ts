@@ -3,6 +3,7 @@ import { MemoryStorage } from "./memory.ts";
 import { SQLiteStorage } from "./sqlite.ts";
 import { sqliteAdapter } from "./adapters.ts";
 import type { SQLiteAdapter } from "./types.ts";
+import { runStorageSuite } from "./test-suite.ts";
 
 // Mock SQLite database that implements the ExecutableDriver interface
 // (used with sqliteAdapter to create an SQLiteAdapter)
@@ -87,7 +88,7 @@ class MockExecutableDriver {
   }
 }
 
-// Direct mock adapter for testing (without going through valTownAdapter)
+// Direct mock adapter for testing (without going through sqliteAdapter)
 function createMockAdapter(): SQLiteAdapter {
   const tables = new Map<string, Map<string, unknown[]>>();
 
@@ -167,62 +168,21 @@ function createMockAdapter(): SQLiteAdapter {
   };
 }
 
-// ============ MemoryStorage Tests ============
+// ============ Shared conformance suite ============
 
-Deno.test("MemoryStorage - basic operations", async (t) => {
-  const storage = new MemoryStorage();
+runStorageSuite("MemoryStorage", () => new MemoryStorage());
 
-  await t.step("set and get value", async () => {
-    await storage.set("key1", { foo: "bar" });
-    const result = await storage.get<{ foo: string }>("key1");
-    assertExists(result);
-    assertEquals(result.foo, "bar");
-  });
+runStorageSuite(
+  "SQLiteStorage (direct adapter)",
+  () => new SQLiteStorage(createMockAdapter()),
+);
 
-  await t.step("get non-existent key returns null", async () => {
-    const result = await storage.get("nonexistent");
-    assertEquals(result, null);
-  });
+runStorageSuite(
+  "SQLiteStorage (sqliteAdapter)",
+  () => new SQLiteStorage(sqliteAdapter(new MockExecutableDriver())),
+);
 
-  await t.step("delete removes value", async () => {
-    await storage.set("key2", "value");
-    await storage.delete("key2");
-    const result = await storage.get("key2");
-    assertEquals(result, null);
-  });
-
-  await t.step("overwrite existing value", async () => {
-    await storage.set("key3", "first");
-    await storage.set("key3", "second");
-    const result = await storage.get("key3");
-    assertEquals(result, "second");
-  });
-});
-
-Deno.test("MemoryStorage - TTL expiration", async (t) => {
-  const storage = new MemoryStorage();
-
-  await t.step("value available before TTL", async () => {
-    await storage.set("ttl-key", "value", { ttl: 10 }); // 10 seconds
-    const result = await storage.get("ttl-key");
-    assertEquals(result, "value");
-  });
-
-  await t.step("value expired after TTL", async () => {
-    // Set with very short TTL
-    await storage.set("expired-key", "value", { ttl: 0.001 }); // 1ms
-    // Wait long enough to ensure expiration
-    await new Promise((r) => setTimeout(r, 50));
-    const result = await storage.get("expired-key");
-    assertEquals(result, null);
-  });
-
-  await t.step("value without TTL never expires", async () => {
-    await storage.set("no-ttl", "value");
-    const result = await storage.get("no-ttl");
-    assertEquals(result, "value");
-  });
-});
+// ============ MemoryStorage-specific tests ============
 
 Deno.test("MemoryStorage - helper methods", async (t) => {
   await t.step("clear removes all entries", async () => {
@@ -250,80 +210,7 @@ Deno.test("MemoryStorage - helper methods", async (t) => {
   });
 });
 
-Deno.test("MemoryStorage - complex values", async (t) => {
-  const storage = new MemoryStorage();
-
-  await t.step("stores objects", async () => {
-    const obj = { nested: { deep: { value: 123 } } };
-    await storage.set("obj", obj);
-    const result = await storage.get<typeof obj>("obj");
-    assertEquals(result, obj);
-  });
-
-  await t.step("stores arrays", async () => {
-    const arr = [1, 2, 3, { four: 4 }];
-    await storage.set("arr", arr);
-    const result = await storage.get<typeof arr>("arr");
-    assertEquals(result, arr);
-  });
-
-  await t.step("stores null", async () => {
-    await storage.set("null", null);
-    const result = await storage.get("null");
-    assertEquals(result, null);
-  });
-});
-
-// ============ SQLiteStorage Tests ============
-
-Deno.test("SQLiteStorage - basic operations with direct adapter", async (t) => {
-  const adapter = createMockAdapter();
-  const storage = new SQLiteStorage(adapter);
-
-  await t.step("set and get value", async () => {
-    await storage.set("key1", { foo: "bar" });
-    const result = await storage.get<{ foo: string }>("key1");
-    assertExists(result);
-    assertEquals(result.foo, "bar");
-  });
-
-  await t.step("get non-existent key returns null", async () => {
-    const result = await storage.get("nonexistent");
-    assertEquals(result, null);
-  });
-
-  await t.step("delete removes value", async () => {
-    await storage.set("key2", "value");
-    await storage.delete("key2");
-    const result = await storage.get("key2");
-    assertEquals(result, null);
-  });
-});
-
-Deno.test("SQLiteStorage - with sqliteAdapter", async (t) => {
-  const mockDriver = new MockExecutableDriver();
-  const adapter = sqliteAdapter(mockDriver);
-  const storage = new SQLiteStorage(adapter);
-
-  await t.step("set and get value", async () => {
-    await storage.set("key1", { foo: "bar" });
-    const result = await storage.get<{ foo: string }>("key1");
-    assertExists(result);
-    assertEquals(result.foo, "bar");
-  });
-
-  await t.step("get non-existent key returns null", async () => {
-    const result = await storage.get("nonexistent");
-    assertEquals(result, null);
-  });
-
-  await t.step("delete removes value", async () => {
-    await storage.set("key2", "value");
-    await storage.delete("key2");
-    const result = await storage.get("key2");
-    assertEquals(result, null);
-  });
-});
+// ============ SQLiteStorage-specific tests ============
 
 Deno.test("SQLiteStorage - custom options", async (t) => {
   await t.step("accepts custom table name", async () => {

@@ -6,6 +6,9 @@
  * Provides a simple storage interface with implementations for:
  * - In-memory storage (for testing/development)
  * - SQLite storage (works with any SQLite driver via adapters)
+ * - Deno KV storage (Deno's built-in key-value store)
+ * - Redis storage (works with any Redis client via adapter)
+ * - Upstash Redis storage (serverless Redis via REST API)
  *
  * @example Val.Town / libSQL / Turso
  * ```typescript
@@ -49,6 +52,11 @@ export type { Logger, OAuthStorage, SQLiteAdapter } from "./src/types.ts";
 export { MemoryStorage } from "./src/memory.ts";
 export { SQLiteStorage } from "./src/sqlite.ts";
 export type { SQLiteStorageOptions } from "./src/sqlite.ts";
+export { DenoKvStorage } from "./src/deno-kv.ts";
+export { RedisStorage } from "./src/redis.ts";
+export type { RedisAdapter } from "./src/redis.ts";
+export { UpstashRedisStorage } from "./src/upstash.ts";
+export type { UpstashRedisOptions } from "./src/upstash.ts";
 
 // Adapters
 export {
