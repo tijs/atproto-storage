@@ -76,7 +76,13 @@ export class UpstashRedisStorage implements OAuthStorage {
     const serialized = JSON.stringify(value);
 
     if (options?.ttl) {
-      await this.command("SET", key, serialized, "PX", Math.ceil(options.ttl * 1000));
+      await this.command(
+        "SET",
+        key,
+        serialized,
+        "PX",
+        Math.ceil(options.ttl * 1000),
+      );
     } else {
       await this.command("SET", key, serialized);
     }

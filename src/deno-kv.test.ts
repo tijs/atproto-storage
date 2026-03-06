@@ -21,11 +21,14 @@ Deno.test("DenoKvStorage - basic operations", async (t) => {
       assertEquals(result.foo, "bar");
     }));
 
-  await t.step("get non-existent key returns null", () =>
-    withStorage(async (storage) => {
-      const result = await storage.get("nonexistent");
-      assertEquals(result, null);
-    }));
+  await t.step(
+    "get non-existent key returns null",
+    () =>
+      withStorage(async (storage) => {
+        const result = await storage.get("nonexistent");
+        assertEquals(result, null);
+      }),
+  );
 
   await t.step("delete removes value", () =>
     withStorage(async (storage) => {
@@ -35,22 +38,28 @@ Deno.test("DenoKvStorage - basic operations", async (t) => {
       assertEquals(result, null);
     }));
 
-  await t.step("overwrite existing value", () =>
-    withStorage(async (storage) => {
-      await storage.set("key3", "first");
-      await storage.set("key3", "second");
-      const result = await storage.get("key3");
-      assertEquals(result, "second");
-    }));
+  await t.step(
+    "overwrite existing value",
+    () =>
+      withStorage(async (storage) => {
+        await storage.set("key3", "first");
+        await storage.set("key3", "second");
+        const result = await storage.get("key3");
+        assertEquals(result, "second");
+      }),
+  );
 });
 
 Deno.test("DenoKvStorage - TTL expiration", async (t) => {
-  await t.step("value available before TTL", () =>
-    withStorage(async (storage) => {
-      await storage.set("ttl-key", "value", { ttl: 10 });
-      const result = await storage.get("ttl-key");
-      assertEquals(result, "value");
-    }));
+  await t.step(
+    "value available before TTL",
+    () =>
+      withStorage(async (storage) => {
+        await storage.set("ttl-key", "value", { ttl: 10 });
+        const result = await storage.get("ttl-key");
+        assertEquals(result, "value");
+      }),
+  );
 
   // NOTE: Deno KV TTL enforcement is runtime-dependent. expireIn is passed correctly
   // but eviction timing varies by environment. Verified to work on Deno Deploy.
@@ -66,12 +75,15 @@ Deno.test("DenoKvStorage - TTL expiration", async (t) => {
       }),
   });
 
-  await t.step("value without TTL never expires", () =>
-    withStorage(async (storage) => {
-      await storage.set("no-ttl", "value");
-      const result = await storage.get("no-ttl");
-      assertEquals(result, "value");
-    }));
+  await t.step(
+    "value without TTL never expires",
+    () =>
+      withStorage(async (storage) => {
+        await storage.set("no-ttl", "value");
+        const result = await storage.get("no-ttl");
+        assertEquals(result, "value");
+      }),
+  );
 });
 
 Deno.test("DenoKvStorage - complex values", async (t) => {

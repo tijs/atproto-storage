@@ -35,7 +35,7 @@ export class DenoKvStorage implements OAuthStorage {
   }
 
   async get<T = unknown>(key: string): Promise<T | null> {
-    const result = await this.kv.get<T>([ ...this.prefix, key]);
+    const result = await this.kv.get<T>([...this.prefix, key]);
     return result.value ?? null;
   }
 

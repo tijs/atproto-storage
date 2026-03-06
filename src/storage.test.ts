@@ -1,4 +1,4 @@
-import { assertEquals, assertExists } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import { MemoryStorage } from "./memory.ts";
 import { SQLiteStorage } from "./sqlite.ts";
 import { sqliteAdapter } from "./adapters.ts";

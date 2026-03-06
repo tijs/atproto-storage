@@ -11,8 +11,8 @@ key-value storage interface with multiple backend options.
 ```typescript
 import {
   MemoryStorage,
-  SQLiteStorage,
   sqliteAdapter,
+  SQLiteStorage,
 } from "jsr:@tijs/atproto-storage";
 ```
 
@@ -43,7 +43,7 @@ SQLiteStorage works with any SQLite driver via adapters:
 
 ```typescript
 import { sqlite } from "https://esm.town/v/std/sqlite";
-import { SQLiteStorage, sqliteAdapter } from "jsr:@tijs/atproto-storage";
+import { sqliteAdapter, SQLiteStorage } from "jsr:@tijs/atproto-storage";
 
 const storage = new SQLiteStorage(sqliteAdapter(sqlite));
 ```
@@ -102,7 +102,7 @@ const storage2 = new DenoKvStorage(kv, { prefix: ["my_app", "oauth"] });
 Works with any Redis client via the `RedisAdapter` interface.
 
 ```typescript
-import { RedisStorage, RedisAdapter } from "jsr:@tijs/atproto-storage";
+import { RedisAdapter, RedisStorage } from "jsr:@tijs/atproto-storage";
 import { createClient } from "npm:redis";
 
 const client = createClient();
@@ -122,7 +122,8 @@ const storage = new RedisStorage(adapter);
 
 ### Upstash Redis Storage (Serverless)
 
-Uses the Upstash Redis REST API — no Redis client or persistent connection needed.
+Uses the Upstash Redis REST API — no Redis client or persistent connection
+needed.
 
 ```typescript
 import { UpstashRedisStorage } from "jsr:@tijs/atproto-storage";
