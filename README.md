@@ -188,6 +188,15 @@ interface RedisAdapter {
 }
 ```
 
+## Related Packages
+
+- [@tijs/atproto-oauth](https://github.com/tijs/atproto-oauth) -
+  Framework-agnostic OAuth integration for AT Protocol applications
+- [@tijs/atproto-sessions](https://github.com/tijs/atproto-sessions) - Session
+  cookie management
+- [@tijs/oauth-client-deno](https://github.com/tijs/oauth-client-deno) - AT
+  Protocol OAuth client
+
 ## License
 
 MIT
