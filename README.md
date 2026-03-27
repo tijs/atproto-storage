@@ -2,18 +2,19 @@
 
 [![Test](https://github.com/tijs/atproto-storage/actions/workflows/test.yml/badge.svg)](https://github.com/tijs/atproto-storage/actions/workflows/test.yml)
 [![JSR](https://jsr.io/badges/@tijs/atproto-storage)](https://jsr.io/@tijs/atproto-storage)
+[![npm](https://img.shields.io/npm/v/@tijs/atproto-storage)](https://www.npmjs.com/package/@tijs/atproto-storage)
 
 Storage implementations for AT Protocol OAuth applications. Provides a simple
 key-value storage interface with multiple backend options.
 
 ## Installation
 
-```typescript
-import {
-  MemoryStorage,
-  sqliteAdapter,
-  SQLiteStorage,
-} from "jsr:@tijs/atproto-storage";
+```bash
+# npm
+npm install @tijs/atproto-storage
+
+# Deno
+deno add jsr:@tijs/atproto-storage
 ```
 
 ## Usage
