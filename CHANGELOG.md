@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-05-08
+
+### Fixed
+
+- **SQLiteStorage self-healing schema migration** — `init()` now runs
+  `ALTER TABLE ADD COLUMN` for `created_at` and `updated_at` after the initial
+  `CREATE TABLE IF NOT EXISTS`. Tables created by older versions (pre-1.1.0)
+  that only have `(key, value, expires_at)` are automatically upgraded on first
+  use. "Duplicate column name" errors are swallowed so the fix is idempotent on
+  already-correct schemas.
+
 ## [1.1.0] - 2026-03-06
 
 ### Added

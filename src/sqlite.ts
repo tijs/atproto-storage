@@ -87,6 +87,22 @@ export class SQLiteStorage implements OAuthStorage {
       [],
     );
 
+    // Backfill columns added in v1.1.0 for tables created by older versions.
+    // ALTER TABLE ADD COLUMN fails with "duplicate column name" when the column
+    // already exists — that error is safe to swallow (idempotent).
+    for (
+      const col of [
+        `ALTER TABLE ${this.tableName} ADD COLUMN created_at TEXT NOT NULL DEFAULT ''`,
+        `ALTER TABLE ${this.tableName} ADD COLUMN updated_at TEXT NOT NULL DEFAULT ''`,
+      ]
+    ) {
+      try {
+        await this.adapter.execute(col, []);
+      } catch {
+        // column already exists — ignore
+      }
+    }
+
     // Create index on expires_at for efficient cleanup queries
     await this.adapter.execute(
       `CREATE INDEX IF NOT EXISTS idx_${this.tableName}_expires_at ON ${this.tableName}(expires_at)`,
