@@ -35,4 +35,3 @@ jobs:
 
       - name: Publish to JSR
         run: deno publish
-
