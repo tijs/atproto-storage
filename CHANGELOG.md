@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.8] - 2026-05-08
+
+### Changed
+
+- **CI**: Explicitly fetch GitHub Actions OIDC token with `audience=npm` and
+  pass as `NODE_AUTH_TOKEN`. This is the token npm trusted publishing expects: a
+  short-lived JWT that the registry validates against the configured trusted
+  publisher (owner/repo/workflow). Removes the `token: ""` workaround that still
+  allowed `setup-node` to inject `GITHUB_TOKEN`.
+
 ## [1.2.7] - 2026-05-08
 
 ### Changed
