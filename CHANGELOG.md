@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2026-05-08
+
+### Changed
+
+- **CI**: Configure npm trusted publisher via `npm-publish.yml` workflow.
+
 ## [1.3.0] - 2026-05-08
 
 ### Changed
