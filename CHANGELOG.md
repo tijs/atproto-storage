@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.7] - 2026-05-08
+
+### Changed
+
+- **CI**: Set `token: ""` on `setup-node` to prevent it exporting `GITHUB_TOKEN`
+  as `NODE_AUTH_TOKEN`. With no legacy token, npm uses OIDC trusted publishing.
+
 ## [1.2.6] - 2026-05-08
 
 ### Changed
