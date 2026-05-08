@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.4] - 2026-05-08
+
+### Changed
+
+- **CI**: Delete `setup-node`-injected `GITHUB_TOKEN` from `.npmrc` before
+  `npm publish` so npm uses OIDC trusted publishing instead of the invalid
+  GitHub token (which caused E404 from npmjs.com).
+
 ## [1.2.3] - 2026-05-08
 
 ### Changed
