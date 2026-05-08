@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2026-05-08
+
+### Changed
+
+- **CI**: Split publish into separate `jsr-publish.yml` and `npm-publish.yml`
+  workflows. npm workflow uses trusted publishing (OIDC, no static token).
+
 ## [1.2.9] - 2026-05-08
 
 ### Changed
