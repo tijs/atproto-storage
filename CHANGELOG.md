@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2026-05-08
+
+### Changed
+
+- **CI**: Remove `registry-url` from `setup-node` so npm uses OIDC trusted
+  publishing instead of injecting an empty auth token that overrides the OIDC
+  exchange.
+
 ## [1.2.1] - 2026-05-08
 
 ### Changed
