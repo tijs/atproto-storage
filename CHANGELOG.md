@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2026-05-08
+
+### Changed
+
+- **CI**: Remove `npm install -g npm@latest` from publish workflow — the step
+  was failing on Node.js 22.22.2 runners due to a missing `promise-retry`
+  transitive dependency in the bundled `@npmcli/arborist`. The npm shipped with
+  Node.js 22 is sufficient for publishing.
+
 ## [1.2.0] - 2026-05-08
 
 ### Fixed
