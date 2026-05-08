@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.5] - 2026-05-08
+
+### Changed
+
+- **CI**: Also `unset NODE_AUTH_TOKEN` before `npm publish` — npm reads this
+  env var directly as a fallback even after the `.npmrc` entry is deleted,
+  preventing the OIDC trusted publishing exchange from triggering.
+
 ## [1.2.4] - 2026-05-08
 
 ### Changed
