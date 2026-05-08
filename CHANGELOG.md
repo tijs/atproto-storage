@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.6] - 2026-05-08
+
+### Changed
+
+- **CI**: Restore `NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}` in publish step.
+  npm CLI does not support token-free OIDC auth; `--provenance` uses OIDC for
+  signing only. A granular npm access token scoped to this package is required.
+
 ## [1.2.5] - 2026-05-08
 
 ### Changed
