@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.9] - 2026-05-08
+
+### Changed
+
+- **CI**: Remove npm publish job — JSR is the only distribution target.
+
 ## [1.2.8] - 2026-05-08
 
 ### Changed
