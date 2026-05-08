@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2026-05-08
+
+### Changed
+
+- **CI**: Restore `registry-url` to `setup-node` — required for npm to have
+  registry context when performing the OIDC trusted publishing token exchange.
+
 ## [1.2.2] - 2026-05-08
 
 ### Changed
